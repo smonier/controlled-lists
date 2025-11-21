@@ -1,0 +1,52 @@
+Manifest-Version: 1.0
+Bnd-LastModified: 1763744635185
+Build-Jdk-Spec: 17
+Bundle-Category: jahia-module
+Bundle-Description: This is the custom ReactJS module (Controlled List) 
+ for running on a Jahia server.
+Bundle-DocURL: http://www.jahia.com
+Bundle-ManifestVersion: 2
+Bundle-Name: Controlled List
+Bundle-SymbolicName: controlled-lists
+Bundle-Vendor: Jahia Solutions Group SA
+Bundle-Version: 1.0.0.SNAPSHOT
+Created-By: Apache Maven Bundle Plugin 5.1.9
+Dynamic-ImportPackage: *
+Implementation-Title: Controlled List
+Implementation-URL: http://www.jahia.com
+Implementation-Vendor: Jahia Solutions Group SA
+Implementation-Version: 1.0.0-SNAPSHOT
+Import-Package: org.apache.naming.java,org.jahia.defaults.config.spring,
+ org.jahia.exceptions,org.jahia.services
+Jahia-Download-Sources-Available: true
+Jahia-GroupId: org.jahia.se.modules
+Jahia-Module-Type: system
+Jahia-Required-Version: 8.2.0.0
+Jahia-Source-Control-Connection: scm:git:git@github.com:Jahia/jahia-priv
+ ate.git/jahia-modules/controlled-lists
+Jahia-Source-Control-DeveloperConnection: scm:git:git@github.com:Jahia/j
+ ahia-private.git/jahia-modules/controlled-lists
+Jahia-Source-Control-Tag: JAHIA_8_2_0_0
+Jahia-Source-Folders: /Users/stephane/Runtimes/0.Modules/controlled-list
+ s
+Jahia-Static-Resources: /css,/icons,/images,/img,/javascript
+Provide-Capability: com.jahia.services.content;nodetypes:List<String>="c
+ l:controlledList,cl:controlledTerm,cl:listsFolder",com.jahia.modules.de
+ pendencies;moduleIdentifier=controlled-lists;moduleVersion:Version="1.0
+ .0.SNAPSHOT",com.jahia.modules.dependencies;moduleIdentifier="Controlle
+ d List";moduleVersion:Version="1.0.0.SNAPSHOT"
+Require-Capability: com.jahia.services.content;filter:="(nodetypes=jmix:
+ accessControllableContent)",com.jahia.services.content;filter:="(nodety
+ pes=jmix:contributeMode)",com.jahia.services.content;filter:="(nodetype
+ s=jmix:structuredContent)",com.jahia.services.content;filter:="(nodetyp
+ es=jnt:content)",com.jahia.services.content;filter:="(nodetypes=jnt:con
+ tentFolder)",com.jahia.services.content;filter:="(nodetypes=jnt:folder)
+ ",com.jahia.services.content;filter:="(nodetypes=jnt:module)",com.jahia
+ .services.content;filter:="(nodetypes=jnt:modules)",com.jahia.services.
+ content;filter:="(nodetypes=jnt:portletFolder)",com.jahia.services.cont
+ ent;filter:="(nodetypes=jnt:translation)",com.jahia.services.content;fi
+ lter:="(nodetypes=mix:title)"
+Specification-Title: Controlled List
+Specification-Vendor: Jahia Solutions Group SA
+Specification-Version: 1.0.0-SNAPSHOT
+Tool: Bnd-6.3.1.202206071316

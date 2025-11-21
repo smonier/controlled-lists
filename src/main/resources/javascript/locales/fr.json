@@ -1,0 +1,60 @@
+{
+  "controlled-lists": {
+    "label": "Listes contrôlées",
+    "pageTitle": "Listes contrôlées",
+    "pageSubtitle": "Gérez des listes clé/valeur réutilisables dans toute la plateforme.",
+    "states": {
+      "loading": "Chargement des listes contrôlées..."
+    },
+    "errors": {
+      "missingSite": "Merci de sélectionner un site pour utiliser les listes contrôlées.",
+      "requiredFields": "Le nom système et le titre sont obligatoires.",
+      "duplicateSystemName": "Une liste utilise déjà le nom système \"{{name}}\".",
+      "duplicateTermValue": "Un terme utilise déjà la valeur \"{{value}}\"."
+    },
+    "actions": {
+      "createList": "Nouvelle liste",
+      "reload": "Rafraîchir",
+      "save": "Enregistrer",
+      "cancel": "Annuler",
+      "delete": "Supprimer",
+      "edit": "Modifier",
+      "actionsColumn": "Actions"
+    },
+    "lists": {
+      "title": "Listes",
+      "empty": "Aucune liste contrôlée pour l'instant.",
+      "createTitle": "Créer une nouvelle liste",
+      "editTitle": "Modifier la liste",
+      "fields": {
+        "systemName": "Nom système",
+        "title": "Titre",
+        "description": "Description"
+      },
+      "help": {
+        "systemName": "Identifiant unique utilisé par les développeurs et les API."
+      },
+      "deleteConfirm": "Supprimer la liste \"{{title}}\" ?"
+    },
+    "terms": {
+      "title": "Termes",
+      "empty": "Aucun terme n'est défini pour cette liste.",
+      "addTitle": "Ajouter un terme",
+      "editTitle": "Modifier le terme",
+      "fields": {
+        "value": "Valeur",
+        "label": "Libellé",
+        "description": "Description"
+      },
+      "deleteConfirm": "Supprimer le terme \"{{label}}\" ?"
+    },
+    "feedback": {
+      "listCreated": "Liste créée.",
+      "listUpdated": "Liste mise à jour.",
+      "listDeleted": "Liste supprimée.",
+      "termCreated": "Terme créé.",
+      "termUpdated": "Terme mis à jour.",
+      "termDeleted": "Terme supprimé."
+    }
+  }
+}

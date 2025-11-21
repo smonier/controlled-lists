@@ -1,0 +1,60 @@
+{
+  "controlled-lists": {
+    "label": "Controlled lists",
+    "pageTitle": "Controlled lists",
+    "pageSubtitle": "Store centrally managed key/value lists for editors and developers.",
+    "states": {
+      "loading": "Loading controlled lists..."
+    },
+    "errors": {
+      "missingSite": "Please select a site to use controlled lists.",
+      "requiredFields": "System name and title are mandatory.",
+      "duplicateSystemName": "A list already uses the system name \"{{name}}\".",
+      "duplicateTermValue": "A term already uses the value \"{{value}}\"."
+    },
+    "actions": {
+      "createList": "New list",
+      "reload": "Reload",
+      "save": "Save",
+      "cancel": "Cancel",
+      "delete": "Delete",
+      "edit": "Edit",
+      "actionsColumn": "Actions"
+    },
+    "lists": {
+      "title": "Lists",
+      "empty": "No controlled lists yet.",
+      "createTitle": "Create a new list",
+      "editTitle": "Edit list",
+      "fields": {
+        "systemName": "System name",
+        "title": "Title",
+        "description": "Description"
+      },
+      "help": {
+        "systemName": "Unique identifier used by developers and APIs."
+      },
+      "deleteConfirm": "Delete the list \"{{title}}\"?"
+    },
+    "terms": {
+      "title": "Terms",
+      "empty": "No terms defined for this list.",
+      "addTitle": "Add a term",
+      "editTitle": "Edit term",
+      "fields": {
+        "value": "Value",
+        "label": "Label",
+        "description": "Description"
+      },
+      "deleteConfirm": "Delete the term \"{{label}}\"?"
+    },
+    "feedback": {
+      "listCreated": "List created successfully.",
+      "listUpdated": "List updated.",
+      "listDeleted": "List deleted.",
+      "termCreated": "Term created.",
+      "termUpdated": "Term updated.",
+      "termDeleted": "Term deleted."
+    }
+  }
+}

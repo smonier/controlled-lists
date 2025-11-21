@@ -1,0 +1,100 @@
+.layout {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.container {
+    display: flex;
+    gap: 24px;
+    padding: 24px;
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 10px 30px rgba(20, 46, 110, 0.08);
+}
+
+.listPanel {
+    width: 280px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.listsContainer {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    max-height: 500px;
+    overflow-y: auto;
+    padding-right: 4px;
+}
+
+.listButton {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 12px;
+    border-radius: 6px;
+    border: 1px solid #dfe4ef;
+    background: #f9fbff;
+    color: #2d3c5a;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.15s ease-in-out;
+}
+
+.listButtonActive {
+    border-color: #2681ff;
+    background: rgba(38, 129, 255, 0.1);
+    color: #0c2c66;
+}
+
+.contentPanel {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.card {
+    padding: 20px;
+    border-radius: 8px;
+    border: 1px solid #e0e7ff;
+    background: #fff;
+    box-shadow: 0 4px 14px rgba(21, 34, 50, 0.05);
+}
+
+.formGroup {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin-bottom: 14px;
+}
+
+.textarea {
+    min-height: 90px;
+    padding: 10px;
+    border-radius: 6px;
+    border: 1px solid #d7deef;
+    font-size: 14px;
+    resize: vertical;
+    font-family: inherit;
+}
+
+.feedback {
+    padding: 12px 14px;
+    border-radius: 6px;
+    font-weight: 500;
+}
+
+.feedbackSuccess {
+    background: #e5f5ed;
+    color: #126235;
+    border: 1px solid rgba(18, 98, 53, 0.3);
+}
+
+.feedbackError {
+    background: #fdeaea;
+    color: #aa1b1b;
+    border: 1px solid rgba(170, 27, 27, 0.3);
+}

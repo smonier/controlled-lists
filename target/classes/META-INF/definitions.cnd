@@ -1,0 +1,18 @@
+<jnt = 'http://www.jahia.org/jahia/nt/1.0'>
+<jmix = 'http://www.jahia.org/jahia/mix/1.0'>
+<mix = 'http://www.jcp.org/jcr/mix/1.0'>
+<cl = 'http://www.jahia.org/controlledlists/nt/1.0'>
+
+[cl:listsFolder] > jnt:contentFolder
+ + * (cl:controlledList) = cl:controlledList multiple
+
+[cl:controlledList] > jnt:content, jmix:structuredContent, jmix:accessControllableContent orderable
+ - cl:systemName (string) mandatory indexed=no
+ - cl:title (string) mandatory internationalized
+ - cl:description (string, richtext[ckeditor.toolbar='Tinny']) internationalized
+ + * (cl:controlledTerm) = cl:controlledTerm multiple
+
+[cl:controlledTerm] > jnt:content, jmix:structuredContent orderable
+ - cl:value (string) mandatory
+ - cl:label (string) mandatory internationalized
+ - cl:description (string, richtext[ckeditor.toolbar='Tinny']) internationalized
