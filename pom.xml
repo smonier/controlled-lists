@@ -39,7 +39,6 @@
     <description>This is the custom ReactJS module (Controlled List) for running on a Jahia server.</description>
 
     <properties>
-        <jahia-module-type>system</jahia-module-type>
         <yarn.arguments>build:production</yarn.arguments>
     </properties>
 

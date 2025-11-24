@@ -19,7 +19,8 @@
       "cancel": "Annuler",
       "delete": "Supprimer",
       "edit": "Modifier",
-      "actionsColumn": "Actions"
+      "actionsColumn": "Actions",
+      "importTerms": "Importer des termes"
     },
     "lists": {
       "title": "Listes",
@@ -54,7 +55,32 @@
       "listDeleted": "Liste supprimée.",
       "termCreated": "Terme créé.",
       "termUpdated": "Terme mis à jour.",
-      "termDeleted": "Terme supprimé."
-    }
+      "termDeleted": "Terme supprimé.",
+      "termImported": "{{count}} terme(s) importé(s).",
+      "termReordered": "Ordre des termes mis à jour."
+    },
+    "edit": {
+      "title": "Modifier le terme"
+    },
+    "import": {
+      "title": "Importer des termes",
+      "instructions": "Téléchargez un fichier CSV (colonnes : value,label,description) ou un JSON contenant ces propriétés.",
+      "selectFile": "Choisir un fichier CSV ou JSON",
+      "supportedFormats": "Formats pris en charge : CSV, JSON",
+      "parsing": "Analyse du fichier...",
+      "preview": "Aperçu ({{count}} lignes)",
+      "moreRows": "et {{count}} de plus...",
+      "importButton": "Importer",
+      "language": "Langue",
+      "override": "Écraser les traductions existantes",
+      "errors": {
+        "invalidFormat": "Format de fichier invalide. Assurez-vous que les champs value, label et description sont présents.",
+        "readFailed": "Impossible de lire le fichier.",
+        "noValidRows": "Aucune ligne valide à importer.",
+        "noList": "Sélectionnez une liste avant d'importer des termes.",
+        "noLanguage": "Merci de sélectionner une langue."
+      }
+    },
+    "accordionTitle": "Outils de taxonomie"
   }
 }

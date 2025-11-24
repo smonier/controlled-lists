@@ -1,0 +1,86 @@
+{
+  "controlled-lists": {
+    "label": "Liste controllate",
+    "pageTitle": "Liste controllate",
+    "pageSubtitle": "Gestisci liste chiave/valore centralizzate per editor e sviluppatori.",
+    "states": {
+      "loading": "Caricamento delle liste controllate..."
+    },
+    "errors": {
+      "missingSite": "Seleziona un sito per usare le liste controllate.",
+      "requiredFields": "Nome di sistema e titolo sono obbligatori.",
+      "duplicateSystemName": "Esiste già una lista con il nome di sistema \"{{name}}\".",
+      "duplicateTermValue": "Esiste già un termine con il valore \"{{value}}\"."
+    },
+    "actions": {
+      "createList": "Nuova lista",
+      "reload": "Ricarica",
+      "save": "Salva",
+      "cancel": "Annulla",
+      "delete": "Elimina",
+      "edit": "Modifica",
+      "actionsColumn": "Azioni",
+      "importTerms": "Importa termini"
+    },
+    "lists": {
+      "title": "Liste",
+      "empty": "Nessuna lista controllata disponibile.",
+      "createTitle": "Crea nuova lista",
+      "editTitle": "Modifica lista",
+      "fields": {
+        "systemName": "Nome di sistema",
+        "title": "Titolo",
+        "description": "Descrizione"
+      },
+      "help": {
+        "systemName": "Identificatore univoco usato da sviluppatori e API."
+      },
+      "deleteConfirm": "Eliminare la lista \"{{title}}\"?"
+    },
+    "terms": {
+      "title": "Termini",
+      "empty": "Nessun termine definito per questa lista.",
+      "addTitle": "Aggiungi termine",
+      "editTitle": "Modifica termine",
+      "fields": {
+        "value": "Valore",
+        "label": "Etichetta",
+        "description": "Descrizione"
+      },
+      "deleteConfirm": "Eliminare il termine \"{{label}}\"?"
+    },
+    "feedback": {
+      "listCreated": "Lista creata.",
+      "listUpdated": "Lista aggiornata.",
+      "listDeleted": "Lista eliminata.",
+      "termCreated": "Termine creato.",
+      "termUpdated": "Termine aggiornato.",
+      "termDeleted": "Termine eliminato.",
+      "termImported": "{{count}} termine/i importati.",
+      "termReordered": "Ordine dei termini aggiornato."
+    },
+    "edit": {
+      "title": "Modifica termine"
+    },
+    "import": {
+      "title": "Importa termini",
+      "instructions": "Carica un CSV (colonne: value, label, description) o un JSON con le stesse proprietà.",
+      "selectFile": "Scegli file CSV o JSON",
+      "supportedFormats": "Formati supportati: CSV, JSON",
+      "parsing": "Analisi del file in corso...",
+      "preview": "Anteprima ({{count}} righe)",
+      "moreRows": "e altre {{count}}...",
+      "importButton": "Importa",
+      "language": "Lingua",
+      "override": "Sovrascrivi traduzioni esistenti",
+      "errors": {
+        "invalidFormat": "Formato file non valido. Assicurati di includere value, label e description.",
+        "readFailed": "Impossibile leggere il file.",
+        "noValidRows": "Nessuna riga valida trovata.",
+        "noList": "Seleziona una lista prima di importare.",
+        "noLanguage": "Seleziona una lingua."
+      }
+    },
+    "accordionTitle": "Strumenti di tassonomia"
+  }
+}

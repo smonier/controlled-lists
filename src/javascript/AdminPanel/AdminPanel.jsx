@@ -23,9 +23,15 @@ import {
     DELETE_NODE_MUTATION,
     FIND_NODE_QUERY,
     UPDATE_LIST_MUTATION,
-    UPDATE_TERM_MUTATION
+    UPDATE_TERM_MUTATION,
+    SITE_LANGUAGES_QUERY,
+    RENAME_NODE_MUTATION,
+    REORDER_TERMS_MUTATION
 } from '../graphql/controlledLists.queries';
 import styles from './AdminPanel.module.scss';
+import {TermImportDialog} from './TermImportDialog';
+import {TermEditDialog} from './TermEditDialog';
+import {getFlagEmoji} from './flags';
 
 const defaultListForm = {
     uuid: null,
@@ -72,11 +78,36 @@ const askConfirmation = message => {
     return window.confirm(message);
 };
 
+const reorderTermCollection = (terms, sourceIndex, targetIndex) => {
+    if (!Array.isArray(terms) || terms.length < 2) {
+        return null;
+    }
+
+    if ((sourceIndex === null || sourceIndex === undefined) || (targetIndex === null || targetIndex === undefined) ||
+        sourceIndex < 0 || sourceIndex >= terms.length) {
+        return null;
+    }
+
+    const clampedTarget = Math.max(0, Math.min(targetIndex, terms.length));
+    const nextOrder = [...terms];
+    const [moved] = nextOrder.splice(sourceIndex, 1);
+
+    if (!moved) {
+        return null;
+    }
+
+    const insertIndex = sourceIndex < clampedTarget ? clampedTarget - 1 : clampedTarget;
+    nextOrder.splice(insertIndex, 0, moved);
+
+    const unchanged = nextOrder.length === terms.length && nextOrder.every((term, idx) => term.uuid === terms[idx].uuid);
+    return unchanged ? null : nextOrder;
+};
+
 const mapListNode = node => ({
     uuid: node.uuid,
     path: node.path,
     name: node.name,
-    systemName: node.systemName?.value || '',
+    systemName: node.name,
     title: node.title?.value || node.name,
     description: node.description?.value || '',
     terms: (node.children?.nodes || []).map(term => ({
@@ -89,13 +120,49 @@ const mapListNode = node => ({
     }))
 });
 
+const normalizeLanguages = langs => {
+    if (!Array.isArray(langs)) {
+        return [];
+    }
+
+    const seen = new Set();
+    const normalized = [];
+    langs.forEach(lang => {
+        if (!lang) {
+            return;
+        }
+
+        const code = lang.code;
+        if (!code || seen.has(code)) {
+            return;
+        }
+
+        normalized.push({
+            code,
+            displayName: lang.displayName || code
+        });
+        seen.add(code);
+    });
+
+    return normalized;
+};
+
 export const AdminPanel = () => {
-    const {t} = useTranslation('controlled-lists');
+    const {
+        t,
+        i18n: {language: uiLanguage}
+    } = useTranslation('controlled-lists');
 
     const context = window.contextJsParameters || {};
     const siteKey = context.siteKey || context.site?.key || '';
-    const language = context.uilang || context.lang || context.language || 'en';
+    const siteName = context.site?.displayName || context.site?.name || siteKey || '';
+    const [language, setLanguage] = useState(uiLanguage || 'en');
     const graphqlEndpoint = `${context.contextPath || ''}/modules/graphql`;
+    const initialSiteLanguages = normalizeLanguages((context.siteLanguages || []).map(lang => (typeof lang === 'string' ? {code: lang, displayName: lang} : {
+        code: lang.language || lang.code,
+        displayName: lang.displayName || lang.language || lang.code
+    })).filter(lang => lang.code));
+    const [siteLanguages, setSiteLanguages] = useState(initialSiteLanguages);
 
     const [rootPath, setRootPath] = useState('');
     const [lists, setLists] = useState([]);
@@ -108,6 +175,16 @@ export const AdminPanel = () => {
     const [savingTerm, setSavingTerm] = useState(false);
     const [feedback, setFeedback] = useState(null);
     const [error, setError] = useState(null);
+    const [isImportDialogOpen, setImportDialogOpen] = useState(false);
+    const [importingTerms, setImportingTerms] = useState(false);
+    const [isEditDialogOpen, setEditDialogOpen] = useState(false);
+    const [editTermForm, setEditTermForm] = useState(defaultTermForm);
+    const [reorderingTerms, setReorderingTerms] = useState(false);
+    const [dragState, setDragState] = useState({sourceIndex: null, targetIndex: null});
+
+    useEffect(() => {
+        setLanguage(uiLanguage || 'en');
+    }, [uiLanguage]);
 
     const executeQuery = useCallback(async (query, variables) => {
         const response = await axios.post(graphqlEndpoint, {query, variables}, {
@@ -127,6 +204,21 @@ export const AdminPanel = () => {
         () => lists.find(list => list.uuid === selectedListId) || null,
         [lists, selectedListId]
     );
+
+    const resetDragState = useCallback(() => {
+        setDragState({sourceIndex: null, targetIndex: null});
+    }, []);
+
+    useEffect(() => {
+        resetDragState();
+        setReorderingTerms(false);
+    }, [resetDragState, selectedListId, showCreateList]);
+
+    useEffect(() => {
+        if (rootPath) {
+            refreshLists(rootPath);
+        }
+    }, [language, refreshLists, rootPath]);
 
     useEffect(() => {
         if (feedback) {
@@ -212,6 +304,39 @@ export const AdminPanel = () => {
     }, [ensureRoot, refreshLists, siteKey, t]);
 
     useEffect(() => {
+        if (!siteKey) {
+            setSiteLanguages([]);
+            return;
+        }
+
+        let mounted = true;
+        const fetchLanguages = async () => {
+            try {
+                const data = await executeQuery(SITE_LANGUAGES_QUERY, {sitePath: `/sites/${siteKey}`});
+                const langs = data?.jcr?.nodeByPath?.site?.languages?.filter(lang => lang.activeInEdit) ?? [];
+                if (mounted && langs.length) {
+                    const normalized = normalizeLanguages(langs.map(lang => ({
+                        code: lang.language,
+                        displayName: lang.displayName || lang.language
+                    })));
+                    setSiteLanguages(normalized);
+
+                    if (!normalized.find(lang => lang.code === language) && normalized[0]) {
+                        setLanguage(normalized[0].code);
+                    }
+                }
+            } catch (err) {
+                console.warn('Failed to load site languages', err);
+            }
+        };
+
+        fetchLanguages();
+        return () => {
+            mounted = false;
+        };
+    }, [executeQuery, language, siteKey]);
+
+    useEffect(() => {
         if (showCreateList) {
             setListForm({...defaultListForm});
         } else if (selectedList) {
@@ -227,7 +352,8 @@ export const AdminPanel = () => {
         }
 
         setTermForm({...defaultTermForm});
-    }, [selectedList, showCreateList]);
+        setEditDialogOpen(false);
+    }, [selectedList, showCreateList, language]);
 
     const handleListChange = (field, value) => {
         setListForm(prev => ({...prev, [field]: value}));
@@ -237,8 +363,8 @@ export const AdminPanel = () => {
         setTermForm(prev => ({...prev, [field]: value}));
     };
 
-    const notify = (type, key) => {
-        setFeedback({type, message: t(key)});
+    const notify = (type, key, params) => {
+        setFeedback({type, message: t(key, params)});
     };
 
     const handleSaveList = async event => {
@@ -265,8 +391,7 @@ export const AdminPanel = () => {
         }
 
         const properties = [
-            {name: 'cl:systemName', value: systemName},
-            {name: 'cl:title', value: title, language},
+            {name: 'jcr:title', value: title, language},
             {name: 'cl:description', value: description || '', language}
         ];
 
@@ -282,6 +407,11 @@ export const AdminPanel = () => {
                 await refreshLists(rootPath, newUuid);
             } else if (selectedList) {
                 await executeQuery(UPDATE_LIST_MUTATION, {path: selectedList.path, properties});
+
+                if (selectedList.systemName !== systemName) {
+                    await executeQuery(RENAME_NODE_MUTATION, {path: selectedList.path, name: systemName});
+                }
+
                 notify('success', 'feedback.listUpdated');
                 await refreshLists(rootPath, selectedList.uuid);
             }
@@ -315,15 +445,25 @@ export const AdminPanel = () => {
         setSelectedListId(null);
         setListForm({...defaultListForm});
         setTermForm({...defaultTermForm});
+        resetDragState();
+    };
+
+    const handleLanguageChange = code => {
+        if (!code || code === language) {
+            return;
+        }
+
+        setLanguage(code);
     };
 
     const handleEditTerm = term => {
-        setTermForm({
+        setEditDialogOpen(true);
+        setEditTermForm({
             uuid: term.uuid,
             path: term.path,
             value: term.value,
             label: term.label,
-            description: term.description
+            description: term.description || ''
         });
     };
 
@@ -381,6 +521,51 @@ export const AdminPanel = () => {
         }
     };
 
+    const handleEditFieldChange = (field, value) => {
+        setEditTermForm(prev => ({...prev, [field]: value}));
+    };
+
+    const handleEditDialogSave = async () => {
+        if (!selectedList) {
+            return;
+        }
+
+        const value = editTermForm.value.trim();
+        const label = editTermForm.label.trim();
+        const description = editTermForm.description.trim();
+
+        if (!value || !label) {
+            setFeedback({type: 'error', message: t('errors.requiredFields')});
+            return;
+        }
+
+        const duplicate = selectedList.terms.some(
+            term => term.uuid !== editTermForm.uuid && term.value.toLowerCase() === value.toLowerCase()
+        );
+        if (duplicate) {
+            setFeedback({type: 'error', message: t('errors.duplicateTermValue', {value})});
+            return;
+        }
+
+        const properties = [
+            {name: 'cl:value', value},
+            {name: 'cl:label', value: label, language},
+            {name: 'cl:description', value: description || '', language}
+        ];
+
+        setSavingTerm(true);
+        try {
+            await executeQuery(UPDATE_TERM_MUTATION, {path: editTermForm.path, properties});
+            notify('success', 'feedback.termUpdated');
+            setEditDialogOpen(false);
+            await refreshLists(rootPath, selectedList.uuid);
+        } catch (err) {
+            setFeedback({type: 'error', message: err.message});
+        } finally {
+            setSavingTerm(false);
+        }
+    };
+
     const handleDeleteTerm = async term => {
         if (!selectedList || !term) {
             return;
@@ -391,11 +576,176 @@ export const AdminPanel = () => {
         }
 
         try {
+            if (isEditDialogOpen && editTermForm.uuid === term.uuid) {
+                setEditDialogOpen(false);
+            }
+
             await executeQuery(DELETE_NODE_MUTATION, {path: term.path});
             notify('success', 'feedback.termDeleted');
             await refreshLists(rootPath, selectedList.uuid);
         } catch (err) {
             setFeedback({type: 'error', message: err.message});
+        }
+    };
+
+    const handleImportEntries = async (importedEntries, options = {}) => {
+        if (!selectedList) {
+            setFeedback({type: 'error', message: t('import.errors.noList')});
+            return;
+        }
+
+        setEditDialogOpen(false);
+        setImportingTerms(true);
+        try {
+            const usedNames = new Set(selectedList.terms.map(term => term.name));
+            const existingByValue = new Map(selectedList.terms.map(term => [term.value.toLowerCase(), term]));
+            const createPayloads = [];
+            const updatePayloads = [];
+            const importLanguage = options.language || language;
+            const overrideExisting = Boolean(options.overrideExisting);
+
+            importedEntries.forEach(entry => {
+                const value = entry.value?.trim();
+                const label = entry.label?.trim();
+                if (!value || !label) {
+                    return;
+                }
+
+                const valueKey = value.toLowerCase();
+                const description = entry.description?.trim() || '';
+                const properties = [
+                    {name: 'cl:value', value},
+                    {name: 'cl:label', value: label, language: importLanguage},
+                    {name: 'cl:description', value: description, language: importLanguage}
+                ];
+                const existingTerm = existingByValue.get(valueKey);
+
+                if (existingTerm) {
+                    if (overrideExisting) {
+                        updatePayloads.push({path: existingTerm.path, properties});
+                    }
+
+                    return;
+                }
+
+                const uniqueName = ensureUniqueName(value, Array.from(usedNames), 'controlled-term');
+                usedNames.add(uniqueName);
+                existingByValue.set(valueKey, {path: null});
+                createPayloads.push({name: uniqueName, properties});
+            });
+
+            if (!createPayloads.length && !updatePayloads.length) {
+                setFeedback({type: 'error', message: t('import.errors.noValidRows')});
+                return;
+            }
+
+            const createResults = await Promise.allSettled(createPayloads.map(payload => executeQuery(CREATE_TERM_MUTATION, {
+                parentPath: selectedList.path,
+                name: payload.name,
+                properties: payload.properties
+            })));
+
+            const updateResults = await Promise.allSettled(updatePayloads.map(payload => executeQuery(UPDATE_TERM_MUTATION, {
+                path: payload.path,
+                properties: payload.properties
+            })));
+
+            const created = createResults.filter(result => result.status === 'fulfilled').length;
+            const updated = updateResults.filter(result => result.status === 'fulfilled').length;
+            const rejected = [...createResults, ...updateResults].find(result => result.status === 'rejected');
+
+            if (created + updated > 0) {
+                setImportDialogOpen(false);
+                notify('success', 'feedback.termImported', {count: created + updated});
+                await refreshLists(rootPath, selectedList.uuid);
+            }
+
+            if (rejected) {
+                throw rejected.reason;
+            }
+        } catch (err) {
+            setFeedback({type: 'error', message: err.message});
+        } finally {
+            setImportingTerms(false);
+        }
+    };
+
+    const updateTargetIndex = useCallback(index => {
+        setDragState(prev => {
+            if (prev.sourceIndex === null) {
+                return prev;
+            }
+
+            const limit = selectedList?.terms.length || 0;
+            const clamped = Math.max(0, Math.min(index, limit));
+            if (clamped === prev.targetIndex) {
+                return prev;
+            }
+
+            return {...prev, targetIndex: clamped};
+        });
+    }, [selectedList]);
+
+    const handleTermDragStart = (event, index) => {
+        if (!selectedList || selectedList.terms.length < 2 || reorderingTerms) {
+            return;
+        }
+
+        if (event.dataTransfer) {
+            event.dataTransfer.effectAllowed = 'move';
+            event.dataTransfer.setData('text/plain', selectedList.terms[index].uuid);
+        }
+
+        setDragState({sourceIndex: index, targetIndex: index});
+    };
+
+    const handleTermDragOver = (event, index) => {
+        if (dragState.sourceIndex === null) {
+            return;
+        }
+
+        event.preventDefault();
+        const rect = event.currentTarget.getBoundingClientRect();
+        const shouldPlaceAfter = event.clientY - rect.top > rect.height / 2;
+        const nextIndex = shouldPlaceAfter ? index + 1 : index;
+        updateTargetIndex(nextIndex);
+    };
+
+    const handleTermDrop = async event => {
+        if (dragState.sourceIndex === null || dragState.targetIndex === null || !selectedList) {
+            resetDragState();
+            return;
+        }
+
+        event.preventDefault();
+        event.stopPropagation();
+
+        const {sourceIndex, targetIndex} = dragState;
+        const nextOrder = reorderTermCollection(selectedList.terms, sourceIndex, targetIndex);
+        resetDragState();
+
+        if (!nextOrder) {
+            return;
+        }
+
+        setReorderingTerms(true);
+        try {
+            await executeQuery(REORDER_TERMS_MUTATION, {
+                path: selectedList.path,
+                names: nextOrder.map(term => term.name)
+            });
+            notify('success', 'feedback.termReordered');
+            await refreshLists(rootPath, selectedList.uuid);
+        } catch (err) {
+            setFeedback({type: 'error', message: err.message});
+        } finally {
+            setReorderingTerms(false);
+        }
+    };
+
+    const handleTermDragEnd = () => {
+        if (!reorderingTerms) {
+            resetDragState();
         }
     };
 
@@ -408,28 +758,118 @@ export const AdminPanel = () => {
             );
         }
 
-        return selectedList.terms.map(term => (
-            <TableRow key={term.uuid}>
-                <TableBodyCell>{term.value}</TableBodyCell>
-                <TableBodyCell>{term.label}</TableBodyCell>
-                <TableBodyCell>{term.description}</TableBodyCell>
-                <TableBodyCell>
-                    <div style={{display: 'flex', gap: '8px'}}>
-                        <Button
-                            size="small"
-                            label={t('actions.edit')}
-                            onClick={() => handleEditTerm(term)}
-                        />
-                        <Button
-                            size="small"
-                            color="danger"
-                            label={t('actions.delete')}
-                            onClick={() => handleDeleteTerm(term)}
-                        />
-                    </div>
+        const allowDrag = selectedList.terms.length > 1 && !reorderingTerms;
+        const isSelfTarget = dragState.sourceIndex !== null &&
+            dragState.targetIndex !== null &&
+            (dragState.targetIndex === dragState.sourceIndex ||
+            (dragState.targetIndex === dragState.sourceIndex + 1 && dragState.targetIndex > dragState.sourceIndex));
+        const shouldShowPlaceholder = dragState.sourceIndex !== null &&
+            dragState.targetIndex !== null &&
+            !isSelfTarget;
+        const placeholderIndex = shouldShowPlaceholder ? dragState.targetIndex : null;
+
+        const renderPlaceholder = key => (
+            <TableRow key={`placeholder-${key}`} className={styles.placeholderRow}>
+                <TableBodyCell colSpan={4}>
+                    <div className={styles.placeholderBar}/>
                 </TableBodyCell>
             </TableRow>
-        ));
+        );
+
+        const rows = [];
+        selectedList.terms.forEach((term, index) => {
+            if (placeholderIndex === index) {
+                rows.push(renderPlaceholder(`before-${term.uuid}`));
+            }
+
+            const rowClasses = [styles.termRow];
+            if (dragState.sourceIndex === index) {
+                rowClasses.push(styles.draggingRow);
+            }
+
+            if (!allowDrag) {
+                rowClasses.push(styles.termRowDragDisabled);
+            }
+
+            rows.push(
+                <TableRow
+                    key={term.uuid}
+                    className={rowClasses.join(' ')}
+                    draggable={allowDrag}
+                    onDragStart={event => handleTermDragStart(event, index)}
+                    onDragOver={event => handleTermDragOver(event, index)}
+                    onDragEnd={handleTermDragEnd}
+                >
+                    <TableBodyCell>{term.value}</TableBodyCell>
+                    <TableBodyCell>{term.label}</TableBodyCell>
+                    <TableBodyCell className={styles.descriptionCell}>
+                        <div className={styles.descriptionContent}>{term.description}</div>
+                    </TableBodyCell>
+                    <TableBodyCell>
+                        <div className={styles.termActions}>
+                            <Button
+                                size="small"
+                                label={t('actions.edit')}
+                                onClick={() => handleEditTerm(term)}
+                            />
+                            <Button
+                                size="small"
+                                color="danger"
+                                label={t('actions.delete')}
+                                onClick={() => handleDeleteTerm(term)}
+                            />
+                        </div>
+                    </TableBodyCell>
+                </TableRow>
+            );
+        });
+
+        if (placeholderIndex !== null && placeholderIndex === selectedList.terms.length) {
+            rows.push(renderPlaceholder('after-last'));
+        }
+
+        if (allowDrag) {
+            rows.push(
+                <TableRow
+                    key="drop-zone"
+                    className={styles.dropZoneRow}
+                    onDragOver={event => {
+                        if (dragState.sourceIndex === null) {
+                            return;
+                        }
+
+                        event.preventDefault();
+                        updateTargetIndex(selectedList.terms.length);
+                    }}
+                >
+                    <TableBodyCell colSpan={4}/>
+                </TableRow>
+            );
+        }
+
+        return rows;
+    };
+
+    const renderLanguageTabs = () => {
+        if (!siteLanguages.length) {
+            return null;
+        }
+
+        return (
+            <div className={styles.languageTabs}>
+                {siteLanguages.map(lang => (
+                    <button
+                        key={lang.code}
+                        type="button"
+                        className={`${styles.languageTab} ${lang.code === language ? styles.languageTabActive : ''}`}
+                        onClick={() => handleLanguageChange(lang.code)}
+                    >
+                        <span className={styles.languageFlag}>{getFlagEmoji(lang.code)}</span>
+                        <span>{lang.displayName || lang.code}</span>
+                    </button>
+                ))}
+            </div>
+        );
     };
 
     const renderListForm = () => (
@@ -478,9 +918,18 @@ export const AdminPanel = () => {
 
         return (
             <Paper className={styles.card}>
-                <Typography variant="heading">{t('terms.title')}</Typography>
+                <div className={styles.cardHeader}>
+                    <Typography variant="heading">{t('terms.title')}</Typography>
+                    <Button
+                        size="big"
+                        color="accent"
+                        isDisabled={importingTerms}
+                        label={t('actions.importTerms')}
+                        onClick={() => setImportDialogOpen(true)}
+                    />
+                </div>
                 <div style={{overflowX: 'auto', marginTop: '12px'}}>
-                    <Table>
+                    <Table className={styles.termsTable}>
                         <TableHead>
                             <TableRow>
                                 <TableHeadCell>{t('terms.fields.value')}</TableHeadCell>
@@ -489,7 +938,7 @@ export const AdminPanel = () => {
                                 <TableHeadCell>{t('actions.actionsColumn')}</TableHeadCell>
                             </TableRow>
                         </TableHead>
-                        <TableBody>
+                        <TableBody onDrop={handleTermDrop}>
                             {renderTermRows()}
                         </TableBody>
                     </Table>
@@ -551,56 +1000,80 @@ export const AdminPanel = () => {
         </div>
     );
 
+    const activeLanguage = siteLanguages.find(lang => lang.code === language);
+
     return (
-        <LayoutContent
-            header={(
-                <Header
-                    title={t('pageTitle')}
-                    subtitle={t('pageSubtitle')}
-                    mainActions={[
-                        <Button
-                            key="create-list"
-                            color="accent"
-                            size="big"
-                            label={t('actions.createList')}
-                            onClick={beginCreateList}
-                        />
-                    ]}
-                />
-            )}
-            content={(
-                <div className={styles.layout}>
-                    {feedback && (
-                        <div className={`${styles.feedback} ${feedback.type === 'error' ? styles.feedbackError : styles.feedbackSuccess}`}>
-                            {feedback.message}
-                        </div>
-                    )}
-                    {error && (
-                        <div className={`${styles.feedback} ${styles.feedbackError}`}>
-                            {error.message}
-                        </div>
-                    )}
-                    <div className={styles.container}>
-                        {renderSidebar()}
-                        <div className={styles.contentPanel}>
-                            {loading && (
-                                <Typography variant="body">{t('states.loading')}</Typography>
-                            )}
-                            {!loading && (lists.length > 0 || showCreateList) && (
-                                <>
-                                    {renderListForm()}
-                                    {renderTermsSection()}
-                                </>
-                            )}
-                            {!loading && lists.length === 0 && !showCreateList && (
-                                <Paper className={styles.card}>
-                                    <Typography variant="body">{t('lists.empty')}</Typography>
-                                </Paper>
-                            )}
+        <>
+            <LayoutContent
+                header={(
+                    <Header
+                        title={`${t('pageTitle')}${siteName ? ` - ${siteName}` : ''}`}
+                        subtitle={t('pageSubtitle')}
+                        mainActions={[
+                            <Button
+                                key="create-list"
+                                color="accent"
+                                size="big"
+                                label={t('actions.createList')}
+                                onClick={beginCreateList}
+                            />
+                        ]}
+                    />
+                )}
+                content={(
+                    <div className={styles.layout}>
+                        {feedback && (
+                            <div className={`${styles.feedback} ${feedback.type === 'error' ? styles.feedbackError : styles.feedbackSuccess}`}>
+                                {feedback.message}
+                            </div>
+                        )}
+                        {error && (
+                            <div className={`${styles.feedback} ${styles.feedbackError}`}>
+                                {error.message}
+                            </div>
+                        )}
+                        <div className={styles.container}>
+                            {renderSidebar()}
+                            <div className={styles.contentPanel}>
+                                {loading && (
+                                    <Typography variant="body">{t('states.loading')}</Typography>
+                                )}
+                                {!loading && (lists.length > 0 || showCreateList) && (
+                                    <>
+                                        {renderLanguageTabs()}
+                                        {renderListForm()}
+                                        {renderTermsSection()}
+                                    </>
+                                )}
+                                {!loading && lists.length === 0 && !showCreateList && (
+                                    <Paper className={styles.card}>
+                                        <Typography variant="body">{t('lists.empty')}</Typography>
+                                    </Paper>
+                                )}
+                            </div>
                         </div>
                     </div>
-                </div>
-            )}
-        />
+                )}
+            />
+            <TermImportDialog
+                isOpen={isImportDialogOpen}
+                t={t}
+                siteLanguages={siteLanguages}
+                initialLanguage={language}
+                onClose={() => setImportDialogOpen(false)}
+                onImport={handleImportEntries}
+            />
+            <TermEditDialog
+                isOpen={isEditDialogOpen}
+                form={editTermForm}
+                isSaving={savingTerm}
+                t={t}
+                languageCode={language}
+                languageName={activeLanguage?.displayName}
+                onChange={handleEditFieldChange}
+                onClose={() => setEditDialogOpen(false)}
+                onSave={handleEditDialogSave}
+            />
+        </>
     );
 };

@@ -19,7 +19,8 @@
       "cancel": "Cancel",
       "delete": "Delete",
       "edit": "Edit",
-      "actionsColumn": "Actions"
+      "actionsColumn": "Actions",
+      "importTerms": "Import terms"
     },
     "lists": {
       "title": "Lists",
@@ -54,7 +55,32 @@
       "listDeleted": "List deleted.",
       "termCreated": "Term created.",
       "termUpdated": "Term updated.",
-      "termDeleted": "Term deleted."
-    }
+      "termDeleted": "Term deleted.",
+      "termImported": "{{count}} term(s) imported.",
+      "termReordered": "Term order updated."
+    },
+    "edit": {
+      "title": "Edit term"
+    },
+    "import": {
+      "title": "Import terms",
+      "instructions": "Upload a CSV (columns: value,label,description) or a JSON array with those properties.",
+      "selectFile": "Choose CSV or JSON file",
+      "supportedFormats": "Supported formats: CSV, JSON",
+      "parsing": "Parsing file...",
+      "preview": "Preview ({{count}} rows)",
+      "moreRows": "and {{count}} more...",
+      "importButton": "Import",
+      "language": "Language",
+      "override": "Overwrite existing translations",
+      "errors": {
+        "invalidFormat": "The file format is invalid. Ensure it contains value, label, and description fields.",
+        "readFailed": "Unable to read file.",
+        "noValidRows": "No valid rows were found to import.",
+        "noList": "Please select a list before importing terms.",
+        "noLanguage": "Please select a language."
+      }
+    },
+    "accordionTitle": "Taxonomy tools"
   }
 }

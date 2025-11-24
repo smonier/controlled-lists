@@ -18,7 +18,11 @@ module.exports = (env, argv) => {
         },
         resolve: {
             mainFields: ['module', 'main'],
-            extensions: ['.mjs', '.js', '.jsx', 'json']
+            extensions: ['.mjs', '.js', '.jsx', 'json'],
+            fallback: {
+                stream: require.resolve('stream-browserify'),
+                buffer: require.resolve('buffer/')
+            }
         },
         module: {
             rules: [

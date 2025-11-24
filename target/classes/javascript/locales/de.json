@@ -1,0 +1,86 @@
+{
+  "controlled-lists": {
+    "label": "Listen verwalten",
+    "pageTitle": "Kontrollierte Listen",
+    "pageSubtitle": "Pflegen Sie zentral gesteuerte Schlüssel/Wert-Listen für Redakteure und Entwickler.",
+    "states": {
+      "loading": "Kontrollierte Listen werden geladen..."
+    },
+    "errors": {
+      "missingSite": "Bitte wählen Sie eine Seite aus, um kontrollierte Listen zu verwenden.",
+      "requiredFields": "Systemname und Titel sind Pflichtfelder.",
+      "duplicateSystemName": "Eine Liste verwendet bereits den Systemnamen \"{{name}}\".",
+      "duplicateTermValue": "Ein Begriff verwendet bereits den Wert \"{{value}}\"."
+    },
+    "actions": {
+      "createList": "Neue Liste",
+      "reload": "Aktualisieren",
+      "save": "Speichern",
+      "cancel": "Abbrechen",
+      "delete": "Löschen",
+      "edit": "Bearbeiten",
+      "actionsColumn": "Aktionen",
+      "importTerms": "Begriffe importieren"
+    },
+    "lists": {
+      "title": "Listen",
+      "empty": "Noch keine kontrollierten Listen vorhanden.",
+      "createTitle": "Neue Liste anlegen",
+      "editTitle": "Liste bearbeiten",
+      "fields": {
+        "systemName": "Systemname",
+        "title": "Titel",
+        "description": "Beschreibung"
+      },
+      "help": {
+        "systemName": "Eindeutiger Bezeichner für Entwickler und APIs."
+      },
+      "deleteConfirm": "Liste \"{{title}}\" löschen?"
+    },
+    "terms": {
+      "title": "Begriffe",
+      "empty": "Für diese Liste sind keine Begriffe definiert.",
+      "addTitle": "Begriff hinzufügen",
+      "editTitle": "Begriff bearbeiten",
+      "fields": {
+        "value": "Wert",
+        "label": "Bezeichnung",
+        "description": "Beschreibung"
+      },
+      "deleteConfirm": "Begriff \"{{label}}\" löschen?"
+    },
+    "feedback": {
+      "listCreated": "Liste wurde erstellt.",
+      "listUpdated": "Liste wurde aktualisiert.",
+      "listDeleted": "Liste wurde gelöscht.",
+      "termCreated": "Begriff wurde erstellt.",
+      "termUpdated": "Begriff wurde aktualisiert.",
+      "termDeleted": "Begriff wurde gelöscht.",
+      "termImported": "{{count}} Begriff(e) importiert.",
+      "termReordered": "Reihenfolge der Begriffe aktualisiert."
+    },
+    "edit": {
+      "title": "Begriff bearbeiten"
+    },
+    "import": {
+      "title": "Begriffe importieren",
+      "instructions": "CSV (Spalten: value,label,description) oder eine JSON-Liste mit diesen Feldern hochladen.",
+      "selectFile": "CSV oder JSON wählen",
+      "supportedFormats": "Unterstützte Formate: CSV, JSON",
+      "parsing": "Datei wird analysiert ...",
+      "preview": "Vorschau ({{count}} Zeilen)",
+      "moreRows": "und {{count}} weitere...",
+      "importButton": "Importieren",
+      "language": "Sprache",
+      "override": "Bestehende Übersetzungen überschreiben",
+      "errors": {
+        "invalidFormat": "Ungültiges Dateiformat. Stellen Sie sicher, dass value, label und description enthalten sind.",
+        "readFailed": "Datei konnte nicht gelesen werden.",
+        "noValidRows": "Keine gültigen Zeilen zum Import gefunden.",
+        "noList": "Bitte wählen Sie vor dem Import eine Liste aus.",
+        "noLanguage": "Bitte wählen Sie eine Sprache."
+      }
+    },
+    "accordionTitle": "Taxonomie-Tools"
+  }
+}

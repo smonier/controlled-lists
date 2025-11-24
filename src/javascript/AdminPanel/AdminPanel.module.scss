@@ -64,6 +64,14 @@
     box-shadow: 0 4px 14px rgba(21, 34, 50, 0.05);
 }
 
+.cardHeader {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 12px;
+    gap: 12px;
+}
+
 .formGroup {
     display: flex;
     flex-direction: column;
@@ -97,4 +105,243 @@
     background: #fdeaea;
     color: #aa1b1b;
     border: 1px solid rgba(170, 27, 27, 0.3);
+}
+
+.dialogOverlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(12, 23, 41, 0.55);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+}
+
+.dialog {
+    width: min(640px, 90vw);
+    background: #fff;
+    border-radius: 10px;
+    box-shadow: 0 25px 45px rgba(15, 23, 42, 0.25);
+    display: flex;
+    flex-direction: column;
+    max-height: 90vh;
+}
+
+.dialogHeader {
+    padding: 20px;
+    border-bottom: 1px solid #ebf0ff;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.dialogBody {
+    padding: 20px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.dialogActions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+    padding: 16px 20px;
+    border-top: 1px solid #ebf0ff;
+}
+
+.hiddenInput {
+    display: none;
+}
+
+.inlineTextarea {
+    width: 100%;
+    min-height: 100px;
+    border: 1px solid #d7deef;
+    border-radius: 6px;
+    padding: 6px 8px;
+    font-family: inherit;
+}
+
+.previewBlock {
+    border: 1px solid #e0e7ff;
+    border-radius: 8px;
+    padding: 12px;
+    background: #f7f9ff;
+}
+
+.previewList {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-top: 8px;
+}
+
+.previewItem {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid #dfe4ef;
+}
+
+.previewItem:last-child {
+    border-bottom: none;
+    padding-bottom: 0;
+}
+
+.descriptionCell {
+    white-space: normal !important;
+    word-break: break-word !important;
+    white-space: normal;
+    word-break: break-word;
+}
+
+.checkboxRow {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+}
+
+.descriptionContent {
+    white-space: normal;
+    word-break: break-word;
+    line-height: 1.4;
+}
+
+.termActions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.termsTable :global(.moonstone-TableRow) {
+    min-height: 72px !important;
+    height: auto !important;
+}
+
+.termsTable :global(.moonstone-tableBodyCell) {
+    vertical-align: top !important;
+    padding-top: 12px !important;
+    padding-bottom: 12px !important;
+    line-height: 1.4;
+    overflow: visible !important;
+}
+
+.termsTable :global(.moonstone-tableCellContent) {
+    overflow: visible !important;
+    white-space: normal;
+}
+
+.termRow {
+    cursor: grab;
+}
+
+.termRowDragDisabled {
+    cursor: default;
+}
+
+.draggingRow {
+    opacity: 0.5;
+}
+
+.placeholderRow {
+    pointer-events: none;
+    height: 64px;
+    background: rgba(38, 129, 255, 0.08);
+}
+
+.placeholderRow td {
+    padding: 12px !important;
+    border: 2px dashed #2681ff !important;
+}
+
+.placeholderBar {
+    height: 100%;
+}
+
+.dropZoneRow {
+    height: 24px;
+}
+
+.languageTabs {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 16px;
+}
+
+.languageTab {
+    border: 1px solid #dfe4ef;
+    background: #f7f7fb;
+    padding: 6px 12px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.15s ease-in-out;
+    display: flex;
+    gap: 6px;
+    align-items: center;
+}
+
+.languageTabActive {
+    background: rgba(38, 129, 255, 0.12);
+    border-color: #2681ff;
+    color: #0c2c66;
+    font-weight: 600;
+}
+
+.languageFlag {
+    font-size: 16px;
+}
+
+.languageBadge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-weight: 600;
+}
+
+.selectorCard {
+    padding: 16px;
+    border-radius: 8px;
+}
+
+.selectorContainer {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.selectorLoading {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.selectorTerms {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.selectorTermsList {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    max-height: 240px;
+    overflow-y: auto;
+    padding-right: 4px;
+}
+
+.selectorSelection {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.selectorChips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
 }

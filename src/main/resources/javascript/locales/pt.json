@@ -1,0 +1,86 @@
+{
+  "controlled-lists": {
+    "label": "Listas controladas",
+    "pageTitle": "Listas controladas",
+    "pageSubtitle": "Mantenha listas chave/valor reutilizáveis para editores e desenvolvedores.",
+    "states": {
+      "loading": "Carregando listas controladas..."
+    },
+    "errors": {
+      "missingSite": "Selecione um site para usar as listas controladas.",
+      "requiredFields": "Nome do sistema e título são obrigatórios.",
+      "duplicateSystemName": "Já existe uma lista com o nome \"{{name}}\".",
+      "duplicateTermValue": "Já existe um termo com o valor \"{{value}}\"."
+    },
+    "actions": {
+      "createList": "Nova lista",
+      "reload": "Recarregar",
+      "save": "Salvar",
+      "cancel": "Cancelar",
+      "delete": "Excluir",
+      "edit": "Editar",
+      "actionsColumn": "Ações",
+      "importTerms": "Importar termos"
+    },
+    "lists": {
+      "title": "Listas",
+      "empty": "Ainda não há listas controladas.",
+      "createTitle": "Criar nova lista",
+      "editTitle": "Editar lista",
+      "fields": {
+        "systemName": "Nome do sistema",
+        "title": "Título",
+        "description": "Descrição"
+      },
+      "help": {
+        "systemName": "Identificador único usado por desenvolvedores e APIs."
+      },
+      "deleteConfirm": "Excluir a lista \"{{title}}\"?"
+    },
+    "terms": {
+      "title": "Termos",
+      "empty": "Nenhum termo definido para esta lista.",
+      "addTitle": "Adicionar termo",
+      "editTitle": "Editar termo",
+      "fields": {
+        "value": "Valor",
+        "label": "Rótulo",
+        "description": "Descrição"
+      },
+      "deleteConfirm": "Excluir o termo \"{{label}}\"?"
+    },
+    "feedback": {
+      "listCreated": "Lista criada.",
+      "listUpdated": "Lista atualizada.",
+      "listDeleted": "Lista excluída.",
+      "termCreated": "Termo criado.",
+      "termUpdated": "Termo atualizado.",
+      "termDeleted": "Termo excluído.",
+      "termImported": "{{count}} termo(s) importado(s).",
+      "termReordered": "Ordem dos termos atualizada."
+    },
+    "edit": {
+      "title": "Editar termo"
+    },
+    "import": {
+      "title": "Importar termos",
+      "instructions": "Envie um CSV (colunas: value,label,description) ou um JSON com essas propriedades.",
+      "selectFile": "Escolher arquivo CSV ou JSON",
+      "supportedFormats": "Formatos suportados: CSV, JSON",
+      "parsing": "Analisando arquivo...",
+      "preview": "Prévia ({{count}} linhas)",
+      "moreRows": "e mais {{count}}...",
+      "importButton": "Importar",
+      "language": "Idioma",
+      "override": "Substituir traduções existentes",
+      "errors": {
+        "invalidFormat": "Formato de arquivo inválido. Certifique-se de que contenha value, label e description.",
+        "readFailed": "Não foi possível ler o arquivo.",
+        "noValidRows": "Nenhuma linha válida encontrada.",
+        "noList": "Selecione uma lista antes de importar.",
+        "noLanguage": "Selecione um idioma."
+      }
+    },
+    "accordionTitle": "Ferramentas de taxonomia"
+  }
+}

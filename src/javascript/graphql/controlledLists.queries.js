@@ -20,10 +20,7 @@ export const CONTROLLED_LISTS_QUERY = `
                         uuid
                         path
                         name
-                        systemName: property(name: "cl:systemName") {
-                            value
-                        }
-                        title: property(name: "cl:title", language: $language) {
+                        title: property(name: "jcr:title", language: $language) {
                             value
                         }
                         description: property(name: "cl:description", language: $language) {
@@ -129,6 +126,71 @@ export const UPDATE_TERM_MUTATION = `
                     }
                 }
                 uuid
+            }
+        }
+    }
+`;
+
+export const SITE_LANGUAGES_QUERY = `
+    query ControlledListLanguages($sitePath: String!) {
+        jcr {
+            nodeByPath(path: $sitePath) {
+                site {
+                    languages {
+                        displayName
+                        language
+                        activeInEdit
+                    }
+                }
+            }
+        }
+    }
+`;
+
+export const RENAME_NODE_MUTATION = `
+    mutation RenameControlledList($path: String!, $name: String!) {
+        jcr(workspace: EDIT) {
+            mutateNode(pathOrId: $path) {
+                rename(name: $name)
+            }
+        }
+    }
+`;
+
+export const REORDER_TERMS_MUTATION = `
+    mutation ReorderControlledTerms($path: String!, $names: [String]!) {
+        jcr(workspace: EDIT) {
+            mutateNode(pathOrId: $path) {
+                reorderChildren(names: $names)
+            }
+        }
+    }
+`;
+
+export const CONTROLLED_LISTS_SELECTOR_QUERY = `
+    query SelectorControlledLists($rootPath: String!, $language: String!) {
+        jcr {
+            nodeByPath(path: $rootPath) {
+                children(typesFilter: {types: ["cl:controlledList"]}) {
+                    nodes {
+                        uuid
+                        name
+                        title: property(name: "jcr:title", language: $language) {
+                            value
+                        }
+                        children(typesFilter: {types: ["cl:controlledTerm"]}) {
+                            nodes {
+                                uuid
+                                termValue: property(name: "cl:value") {
+                                    value
+                                }
+                                termLabel: property(name: "cl:label", language: $language) {
+                                    value
+                                }
+                            }
+                        }
+                    }
+                }
             }
         }
     }

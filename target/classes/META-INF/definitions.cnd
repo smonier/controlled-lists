@@ -6,9 +6,7 @@
 [cl:listsFolder] > jnt:contentFolder
  + * (cl:controlledList) = cl:controlledList multiple
 
-[cl:controlledList] > jnt:content, jmix:structuredContent, jmix:accessControllableContent orderable
- - cl:systemName (string) mandatory indexed=no
- - cl:title (string) mandatory internationalized
+[cl:controlledList] > jnt:content, jmix:editorialContent, jmix:structuredContent, jmix:accessControllableContent, mix:title orderable
  - cl:description (string, richtext[ckeditor.toolbar='Tinny']) internationalized
  + * (cl:controlledTerm) = cl:controlledTerm multiple
 
@@ -16,3 +14,7 @@
  - cl:value (string) mandatory
  - cl:label (string) mandatory internationalized
  - cl:description (string, richtext[ckeditor.toolbar='Tinny']) internationalized
+
+
+[cl:test] > jnt:content, jmix:editorialContent, jmix:structuredContent, mix:title
+ - cl:list (string)

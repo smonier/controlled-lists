@@ -1,5 +1,5 @@
 Manifest-Version: 1.0
-Bnd-LastModified: 1763744635185
+Bnd-LastModified: 1764010204164
 Build-Jdk-Spec: 17
 Bundle-Category: jahia-module
 Bundle-Description: This is the custom ReactJS module (Controlled List) 
@@ -12,6 +12,10 @@ Bundle-Vendor: Jahia Solutions Group SA
 Bundle-Version: 1.0.0.SNAPSHOT
 Created-By: Apache Maven Bundle Plugin 5.1.9
 Dynamic-ImportPackage: *
+Git-branch: main
+Git-commit-desc: first commit
+Git-last-commit-id: 1e1db7d042929967724092713107cd89e07e3b27
+Git-last-commit-time: 2025-11-21T18:15:23+0100
 Implementation-Title: Controlled List
 Implementation-URL: http://www.jahia.com
 Implementation-Vendor: Jahia Solutions Group SA
@@ -20,7 +24,7 @@ Import-Package: org.apache.naming.java,org.jahia.defaults.config.spring,
  org.jahia.exceptions,org.jahia.services
 Jahia-Download-Sources-Available: true
 Jahia-GroupId: org.jahia.se.modules
-Jahia-Module-Type: system
+Jahia-Module-Type: module
 Jahia-Required-Version: 8.2.0.0
 Jahia-Source-Control-Connection: scm:git:git@github.com:Jahia/jahia-priv
  ate.git/jahia-modules/controlled-lists
@@ -31,13 +35,14 @@ Jahia-Source-Folders: /Users/stephane/Runtimes/0.Modules/controlled-list
  s
 Jahia-Static-Resources: /css,/icons,/images,/img,/javascript
 Provide-Capability: com.jahia.services.content;nodetypes:List<String>="c
- l:controlledList,cl:controlledTerm,cl:listsFolder",com.jahia.modules.de
- pendencies;moduleIdentifier=controlled-lists;moduleVersion:Version="1.0
- .0.SNAPSHOT",com.jahia.modules.dependencies;moduleIdentifier="Controlle
- d List";moduleVersion:Version="1.0.0.SNAPSHOT"
+ l:controlledList,cl:controlledTerm,cl:listsFolder,cl:test",com.jahia.mo
+ dules.dependencies;moduleIdentifier=controlled-lists;moduleVersion:Vers
+ ion="1.0.0.SNAPSHOT",com.jahia.modules.dependencies;moduleIdentifier="C
+ ontrolled List";moduleVersion:Version="1.0.0.SNAPSHOT"
 Require-Capability: com.jahia.services.content;filter:="(nodetypes=jmix:
  accessControllableContent)",com.jahia.services.content;filter:="(nodety
  pes=jmix:contributeMode)",com.jahia.services.content;filter:="(nodetype
+ s=jmix:editorialContent)",com.jahia.services.content;filter:="(nodetype
  s=jmix:structuredContent)",com.jahia.services.content;filter:="(nodetyp
  es=jnt:content)",com.jahia.services.content;filter:="(nodetypes=jnt:con
  tentFolder)",com.jahia.services.content;filter:="(nodetypes=jnt:folder)

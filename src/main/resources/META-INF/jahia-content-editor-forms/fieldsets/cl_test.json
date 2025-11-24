@@ -1,0 +1,11 @@
+{
+  "name": "cl:test",
+  "description": "Controlled Lists fieldset",
+  "dynamic": false,
+  "fields": [
+    {
+      "name": "cl:list",
+      "selectorType": "controlledListsSelector"
+    }
+  ]
+}
