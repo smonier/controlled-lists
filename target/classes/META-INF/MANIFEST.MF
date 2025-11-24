@@ -1,5 +1,5 @@
 Manifest-Version: 1.0
-Bnd-LastModified: 1764010204164
+Bnd-LastModified: 1764011075049
 Build-Jdk-Spec: 17
 Bundle-Category: jahia-module
 Bundle-Description: This is the custom ReactJS module (Controlled List) 
@@ -13,9 +13,9 @@ Bundle-Version: 1.0.0.SNAPSHOT
 Created-By: Apache Maven Bundle Plugin 5.1.9
 Dynamic-ImportPackage: *
 Git-branch: main
-Git-commit-desc: first commit
-Git-last-commit-id: 1e1db7d042929967724092713107cd89e07e3b27
-Git-last-commit-time: 2025-11-21T18:15:23+0100
+Git-commit-desc: Selector Type for Controlled List
+Git-last-commit-id: ebc6e0b077279341cea38d652c1dbd29f1bbb858
+Git-last-commit-time: 2025-11-24T19:56:50+0100
 Implementation-Title: Controlled List
 Implementation-URL: http://www.jahia.com
 Implementation-Vendor: Jahia Solutions Group SA
