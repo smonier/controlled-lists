@@ -114,8 +114,8 @@ const mapListNode = node => ({
         uuid: term.uuid,
         path: term.path,
         name: term.name,
-        value: term.termValue?.value || '',
-        label: term.termLabel?.value || '',
+        value: term.name,
+        label: term.termLabel?.value || term.name,
         description: term.termDescription?.value || ''
     }))
 });
@@ -473,42 +473,51 @@ export const AdminPanel = () => {
             return;
         }
 
-        const value = termForm.value.trim();
+        const rawSystemName = termForm.value.trim();
         const label = termForm.label.trim();
         const description = termForm.description.trim();
 
-        if (!value || !label) {
+        if (!rawSystemName || !label) {
             setFeedback({type: 'error', message: t('errors.requiredFields')});
             return;
         }
 
+        const systemName = slugify(rawSystemName);
+        if (!systemName) {
+            setFeedback({type: 'error', message: t('errors.invalidSystemName')});
+            return;
+        }
+
         const duplicate = selectedList.terms.some(
-            term => term.uuid !== termForm.uuid && term.value.toLowerCase() === value.toLowerCase()
+            term => term.uuid !== termForm.uuid && term.name.toLowerCase() === systemName.toLowerCase()
         );
         if (duplicate) {
-            setFeedback({type: 'error', message: t('errors.duplicateTermValue', {value})});
+            setFeedback({type: 'error', message: t('errors.duplicateTermValue', {value: systemName})});
             return;
         }
 
         const properties = [
-            {name: 'cl:value', value},
-            {name: 'cl:label', value: label, language},
+            {name: 'jcr:title', value: label, language},
             {name: 'cl:description', value: description || '', language}
         ];
 
         setSavingTerm(true);
+
         try {
             if (termForm.uuid) {
                 await executeQuery(UPDATE_TERM_MUTATION, {path: termForm.path, properties});
+                if (termForm.value !== systemName) {
+                    await executeQuery(RENAME_NODE_MUTATION, {path: termForm.path, name: systemName});
+                }
+
                 notify('success', 'feedback.termUpdated');
             } else {
-                const existingNames = selectedList.terms.map(term => term.name);
-                const termName = ensureUniqueName(value, existingNames, 'controlled-term');
                 await executeQuery(CREATE_TERM_MUTATION, {
                     parentPath: selectedList.path,
-                    name: termName,
+                    name: systemName,
                     properties
                 });
+
                 notify('success', 'feedback.termCreated');
             }
 
@@ -530,32 +539,42 @@ export const AdminPanel = () => {
             return;
         }
 
-        const value = editTermForm.value.trim();
+        const rawSystemName = editTermForm.value.trim();
         const label = editTermForm.label.trim();
         const description = editTermForm.description.trim();
 
-        if (!value || !label) {
+        if (!rawSystemName || !label) {
             setFeedback({type: 'error', message: t('errors.requiredFields')});
             return;
         }
 
+        const systemName = slugify(rawSystemName);
+        if (!systemName) {
+            setFeedback({type: 'error', message: t('errors.invalidSystemName')});
+            return;
+        }
+
         const duplicate = selectedList.terms.some(
-            term => term.uuid !== editTermForm.uuid && term.value.toLowerCase() === value.toLowerCase()
+            term => term.uuid !== editTermForm.uuid && term.name.toLowerCase() === systemName.toLowerCase()
         );
         if (duplicate) {
-            setFeedback({type: 'error', message: t('errors.duplicateTermValue', {value})});
+            setFeedback({type: 'error', message: t('errors.duplicateTermValue', {value: systemName})});
             return;
         }
 
         const properties = [
-            {name: 'cl:value', value},
-            {name: 'cl:label', value: label, language},
+            {name: 'jcr:title', value: label, language},
             {name: 'cl:description', value: description || '', language}
         ];
 
         setSavingTerm(true);
+
         try {
             await executeQuery(UPDATE_TERM_MUTATION, {path: editTermForm.path, properties});
+            if (editTermForm.value !== systemName) {
+                await executeQuery(RENAME_NODE_MUTATION, {path: editTermForm.path, name: systemName});
+            }
+
             notify('success', 'feedback.termUpdated');
             setEditDialogOpen(false);
             await refreshLists(rootPath, selectedList.uuid);
@@ -598,7 +617,7 @@ export const AdminPanel = () => {
         setImportingTerms(true);
         try {
             const usedNames = new Set(selectedList.terms.map(term => term.name));
-            const existingByValue = new Map(selectedList.terms.map(term => [term.value.toLowerCase(), term]));
+            const existingByName = new Map(selectedList.terms.map(term => [term.name.toLowerCase(), term]));
             const createPayloads = [];
             const updatePayloads = [];
             const importLanguage = options.language || language;
@@ -607,18 +626,22 @@ export const AdminPanel = () => {
             importedEntries.forEach(entry => {
                 const value = entry.value?.trim();
                 const label = entry.label?.trim();
-                if (!value || !label) {
+                if (!label) {
                     return;
                 }
 
-                const valueKey = value.toLowerCase();
+                const normalizedSystemName = slugify(value || '');
+                if (!normalizedSystemName) {
+                    return;
+                }
+
+                const valueKey = normalizedSystemName.toLowerCase();
                 const description = entry.description?.trim() || '';
                 const properties = [
-                    {name: 'cl:value', value},
-                    {name: 'cl:label', value: label, language: importLanguage},
+                    {name: 'jcr:title', value: label, language: importLanguage},
                     {name: 'cl:description', value: description, language: importLanguage}
                 ];
-                const existingTerm = existingByValue.get(valueKey);
+                const existingTerm = existingByName.get(valueKey);
 
                 if (existingTerm) {
                     if (overrideExisting) {
@@ -628,9 +651,13 @@ export const AdminPanel = () => {
                     return;
                 }
 
-                const uniqueName = ensureUniqueName(value, Array.from(usedNames), 'controlled-term');
+                if (usedNames.has(normalizedSystemName)) {
+                    return;
+                }
+
+                const uniqueName = normalizedSystemName;
                 usedNames.add(uniqueName);
-                existingByValue.set(valueKey, {path: null});
+                existingByName.set(valueKey, {path: null});
                 createPayloads.push({name: uniqueName, properties});
             });
 

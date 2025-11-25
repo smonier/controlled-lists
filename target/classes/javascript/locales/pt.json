@@ -10,7 +10,8 @@
       "missingSite": "Selecione um site para usar as listas controladas.",
       "requiredFields": "Nome do sistema e título são obrigatórios.",
       "duplicateSystemName": "Já existe uma lista com o nome \"{{name}}\".",
-      "duplicateTermValue": "Já existe um termo com o valor \"{{value}}\"."
+      "duplicateTermValue": "Já existe um termo com o nome de sistema \"{{value}}\".",
+      "invalidSystemName": "Informe um nome de sistema válido (letras, números, hífens)."
     },
     "actions": {
       "createList": "Nova lista",
@@ -43,8 +44,8 @@
       "addTitle": "Adicionar termo",
       "editTitle": "Editar termo",
       "fields": {
-        "value": "Valor",
-        "label": "Rótulo",
+        "value": "Nome do sistema",
+        "label": "Rótulo (título)",
         "description": "Descrição"
       },
       "deleteConfirm": "Excluir o termo \"{{label}}\"?"
@@ -64,7 +65,7 @@
     },
     "import": {
       "title": "Importar termos",
-      "instructions": "Envie um CSV (colunas: value,label,description) ou um JSON com essas propriedades.",
+      "instructions": "Envie um CSV (colunas: systemName,label,description) ou um JSON com essas propriedades.",
       "selectFile": "Escolher arquivo CSV ou JSON",
       "supportedFormats": "Formatos suportados: CSV, JSON",
       "parsing": "Analisando arquivo...",
@@ -74,7 +75,7 @@
       "language": "Idioma",
       "override": "Substituir traduções existentes",
       "errors": {
-        "invalidFormat": "Formato de arquivo inválido. Certifique-se de que contenha value, label e description.",
+        "invalidFormat": "Formato de arquivo inválido. Certifique-se de que contenha systemName, label e description.",
         "readFailed": "Não foi possível ler o arquivo.",
         "noValidRows": "Nenhuma linha válida encontrada.",
         "noList": "Selecione uma lista antes de importar.",

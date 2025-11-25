@@ -10,7 +10,8 @@
       "missingSite": "Please select a site to use controlled lists.",
       "requiredFields": "System name and title are mandatory.",
       "duplicateSystemName": "A list already uses the system name \"{{name}}\".",
-      "duplicateTermValue": "A term already uses the value \"{{value}}\"."
+      "duplicateTermValue": "A term already uses the system name \"{{value}}\".",
+      "invalidSystemName": "Please provide a valid system name (letters, numbers, hyphens)."
     },
     "actions": {
       "createList": "New list",
@@ -43,8 +44,8 @@
       "addTitle": "Add a term",
       "editTitle": "Edit term",
       "fields": {
-        "value": "Value",
-        "label": "Label",
+        "value": "System name",
+        "label": "Label (title)",
         "description": "Description"
       },
       "deleteConfirm": "Delete the term \"{{label}}\"?"
@@ -64,7 +65,7 @@
     },
     "import": {
       "title": "Import terms",
-      "instructions": "Upload a CSV (columns: value,label,description) or a JSON array with those properties.",
+      "instructions": "Upload a CSV (columns: systemName,label,description) or a JSON array with those properties.",
       "selectFile": "Choose CSV or JSON file",
       "supportedFormats": "Supported formats: CSV, JSON",
       "parsing": "Parsing file...",
@@ -74,7 +75,7 @@
       "language": "Language",
       "override": "Overwrite existing translations",
       "errors": {
-        "invalidFormat": "The file format is invalid. Ensure it contains value, label, and description fields.",
+        "invalidFormat": "The file format is invalid. Ensure it contains systemName, label, and description fields.",
         "readFailed": "Unable to read file.",
         "noValidRows": "No valid rows were found to import.",
         "noList": "Please select a list before importing terms.",

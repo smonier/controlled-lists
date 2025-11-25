@@ -10,7 +10,8 @@
       "missingSite": "Bitte wählen Sie eine Seite aus, um kontrollierte Listen zu verwenden.",
       "requiredFields": "Systemname und Titel sind Pflichtfelder.",
       "duplicateSystemName": "Eine Liste verwendet bereits den Systemnamen \"{{name}}\".",
-      "duplicateTermValue": "Ein Begriff verwendet bereits den Wert \"{{value}}\"."
+      "duplicateTermValue": "Ein Begriff verwendet bereits den Systemnamen \"{{value}}\".",
+      "invalidSystemName": "Bitte einen gültigen Systemnamen angeben (Buchstaben, Zahlen, Bindestriche)."
     },
     "actions": {
       "createList": "Neue Liste",
@@ -43,8 +44,8 @@
       "addTitle": "Begriff hinzufügen",
       "editTitle": "Begriff bearbeiten",
       "fields": {
-        "value": "Wert",
-        "label": "Bezeichnung",
+        "value": "Systemname",
+        "label": "Bezeichnung (Titel)",
         "description": "Beschreibung"
       },
       "deleteConfirm": "Begriff \"{{label}}\" löschen?"
@@ -64,7 +65,7 @@
     },
     "import": {
       "title": "Begriffe importieren",
-      "instructions": "CSV (Spalten: value,label,description) oder eine JSON-Liste mit diesen Feldern hochladen.",
+      "instructions": "CSV (Spalten: systemName,label,description) oder eine JSON-Liste mit diesen Feldern hochladen.",
       "selectFile": "CSV oder JSON wählen",
       "supportedFormats": "Unterstützte Formate: CSV, JSON",
       "parsing": "Datei wird analysiert ...",
@@ -74,7 +75,7 @@
       "language": "Sprache",
       "override": "Bestehende Übersetzungen überschreiben",
       "errors": {
-        "invalidFormat": "Ungültiges Dateiformat. Stellen Sie sicher, dass value, label und description enthalten sind.",
+        "invalidFormat": "Ungültiges Dateiformat. Stellen Sie sicher, dass systemName, label und description enthalten sind.",
         "readFailed": "Datei konnte nicht gelesen werden.",
         "noValidRows": "Keine gültigen Zeilen zum Import gefunden.",
         "noList": "Bitte wählen Sie vor dem Import eine Liste aus.",

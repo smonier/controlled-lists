@@ -12,6 +12,7 @@ This module delivers two complementary capabilities that bring centrally-managed
 ### Features
 - Creates the `/sites/<site>/contents/controlled-lists` tree automatically.
 - Lets privileged users create, edit, import (CSV/JSON), reorder, translate and delete controlled lists and their terms.
+- Terms rely on standard JCR metadata: the node system name stores the technical value, while the title (`jcr:title`) provides the localized label; descriptions stay in `cl:description`.
 - Includes language tabs, drag & drop term reordering, bulk import dialog (with override & language options), and fine-grained buttons (reload, save, edit, delete) aligned with Moonstone design.
 - Ensures the folder is centrally managed with permissions so only authorized groups can adjust vocabularies.
 

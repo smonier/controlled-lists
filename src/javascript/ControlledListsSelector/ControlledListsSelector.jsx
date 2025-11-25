@@ -61,8 +61,8 @@ export const ControlledListsSelector = ({value, onChange, language}) => {
                     label: node.title?.value || node.name,
                     terms: (node.children?.nodes || []).map(term => ({
                         uuid: term.uuid,
-                        value: term.termValue?.value || '',
-                        label: term.termLabel?.value || term.termValue?.value || '',
+                        value: term.name,
+                        label: term.termLabel?.value || term.name,
                         description: term.termDescription?.value || ''
                     }))
                 }));

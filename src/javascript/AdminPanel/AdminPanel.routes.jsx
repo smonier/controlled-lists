@@ -52,6 +52,7 @@ export const registerRoutes = () => {
         path: `${constants.DEFAULT_ROUTE}*`,
         defaultPath: constants.DEFAULT_ROUTE,
         isSelectable: true,
+        requireModuleInstalledOnSite: 'controlled-lists',
         render: v => <Suspense fallback="loading ..."><AdminPanel match={v.match}/></Suspense>
     });
 };

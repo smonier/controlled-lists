@@ -31,10 +31,7 @@ export const CONTROLLED_LISTS_QUERY = `
                                 uuid
                                 path
                                 name
-                                termValue: property(name: "cl:value") {
-                                    value
-                                }
-                                termLabel: property(name: "cl:label", language: $language) {
+                                termLabel: property(name: "jcr:title", language: $language) {
                                     value
                                 }
                                 termDescription: property(name: "cl:description", language: $language) {
@@ -181,10 +178,8 @@ export const CONTROLLED_LISTS_SELECTOR_QUERY = `
                         children(typesFilter: {types: ["cl:controlledTerm"]}) {
                             nodes {
                                 uuid
-                                termValue: property(name: "cl:value") {
-                                    value
-                                }
-                                termLabel: property(name: "cl:label", language: $language) {
+                                name
+                                termLabel: property(name: "jcr:title", language: $language) {
                                     value
                                 }
                                 termDescription: property(name: "cl:description", language: $language) {

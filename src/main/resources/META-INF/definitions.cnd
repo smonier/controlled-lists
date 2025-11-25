@@ -10,9 +10,7 @@
  - cl:description (string, richtext[ckeditor.toolbar='Tinny']) internationalized
  + * (cl:controlledTerm) = cl:controlledTerm multiple
 
-[cl:controlledTerm] > jnt:content, jmix:structuredContent orderable
- - cl:value (string) mandatory
- - cl:label (string) mandatory internationalized
+[cl:controlledTerm] > jnt:content, mix:title, jmix:structuredContent orderable
  - cl:description (string, richtext[ckeditor.toolbar='Tinny']) internationalized
 
 
