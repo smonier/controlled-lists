@@ -38,15 +38,15 @@ const TaxoIcon = ({width = 12, height = 12}) => (
 export const registerRoutes = () => {
     window.jahia.i18n.loadNamespaces('controlled-lists');
 
-    registry.add('accordionItem', 'modelsAccordion', registry.get('accordionItem', 'renderDefaultApps'), {
+    registry.add('accordionItem', 'taxonomyAccordion', registry.get('accordionItem', 'renderDefaultApps'), {
         targets: ['jcontent:75'],
         icon: <TaxoIcon width={24} height={24}/>,
         label: 'controlled-lists:accordionTitle',
-        appsTarget: 'modelsAccordionApps'
+        appsTarget: 'taxonomyAccordionApps'
     });
 
     registry.add('adminRoute', 'controlled-lists', {
-        targets: ['modelsAccordionApps'],
+        targets: ['taxonomyAccordionApps'],
         icon: <ListIcon/>,
         label: 'controlled-lists:label',
         path: `${constants.DEFAULT_ROUTE}*`,
