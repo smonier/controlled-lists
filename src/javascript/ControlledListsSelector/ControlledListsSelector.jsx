@@ -62,7 +62,8 @@ export const ControlledListsSelector = ({value, onChange, language}) => {
                     terms: (node.children?.nodes || []).map(term => ({
                         uuid: term.uuid,
                         value: term.termValue?.value || '',
-                        label: term.termLabel?.value || term.termValue?.value || ''
+                        label: term.termLabel?.value || term.termValue?.value || '',
+                        description: term.termDescription?.value || ''
                     }))
                 }));
                 mapped.sort((a, b) => a.label.localeCompare(b.label));
@@ -152,7 +153,7 @@ export const ControlledListsSelector = ({value, onChange, language}) => {
                                 <CheckboxItem
                                     key={term.uuid}
                                     label={term.label}
-                                    description={term.value}
+                                    description={term.description || term.value}
                                     checked={selectedTermIds.has(term.uuid)}
                                     onChange={() => handleTermToggle(term)}
                                 />

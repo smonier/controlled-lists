@@ -333,6 +333,13 @@
     overflow-y: auto;
     padding-right: 4px;
 }
+.selectorTermsList :global(.moonstone-checkboxItem__description) {
+    display: block;
+    width: 100%;
+    text-align: right !important;
+    margin-left: auto;
+    align-self: flex-end;
+}
 
 .selectorSelection {
     display: flex;

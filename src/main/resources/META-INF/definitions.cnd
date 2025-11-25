@@ -17,4 +17,5 @@
 
 
 [cl:test] > jnt:content, jmix:editorialContent, jmix:structuredContent, mix:title
+ - cl:closedList (weakreference, choicelist[nodes='/sites/digitall/contents/controlled-lists/movies;cl:controlledTerm',sort])
  - cl:list (string)

@@ -187,6 +187,9 @@ export const CONTROLLED_LISTS_SELECTOR_QUERY = `
                                 termLabel: property(name: "cl:label", language: $language) {
                                     value
                                 }
+                                termDescription: property(name: "cl:description", language: $language) {
+                                    value
+                                }
                             }
                         }
                     }
