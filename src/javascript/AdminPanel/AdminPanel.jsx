@@ -1034,7 +1034,7 @@ export const AdminPanel = () => {
             <LayoutContent
                 header={(
                     <Header
-                        title={`${t('pageTitle')}${siteName ? ` - ${siteName}` : ''}`}
+                        title={`${t('pageTitle')}${siteName ? ` - Site ${siteName}` : ''}`}
                         subtitle={t('pageSubtitle')}
                         mainActions={[
                             <Button
